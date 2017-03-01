@@ -1,0 +1,31 @@
+{
+  "name": "nick-gbh-server",
+  "version": "1.0.0",
+  "description": "Server to host Guildball games.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-ng/nick-gbh-server.git"
+  },
+  "author": "Nick Ng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nick-ng/nick-gbh-server/issues"
+  },
+  "homepage": "https://github.com/nick-ng/nick-gbh-server#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "redis": "^2.6.5",
+    "uws": "^0.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0"
+  }
+}
