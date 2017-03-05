@@ -4,7 +4,8 @@
   "description": "Server to host Guildball games.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "server": "node index.js"
   },
   "repository": {
     "type": "git",
