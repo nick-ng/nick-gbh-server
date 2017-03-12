@@ -18,10 +18,11 @@
   },
   "homepage": "https://github.com/nick-ng/nick-gbh-server#readme",
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
     "express": "^4.14.1",
-    "express-graphql": "^0.6.3",
-    "graphql": "^0.9.1",
     "redis": "^2.6.5",
+    "uuid": "^3.0.1",
     "uws": "^0.13.0"
   },
   "devDependencies": {

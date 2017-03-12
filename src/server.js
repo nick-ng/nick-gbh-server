@@ -1,23 +1,21 @@
 const express = require('express');
 const uws = require('uws');
 const path = require('path');
-const graphqlHTTP = require('express-graphql');
+const bodyParser = require('body-parser');
 
-const schema = require('./graphql/schema');
+const { redisPromise } = require('./services/redis-service');
+const gameServices = require('./services/game-service');
 
-const root = {
-  hello: () => 'Hello world!',
-};
+const { makeNewGame, checkId } = gameServices(redisPromise);
 
 const PORT = process.env.PORT || 4000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
 
 const server = express();
-server.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: root,
-  graphiql: true,
-}));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
+server.post('/newgame', makeNewGame);
+server.post('/checkid', (req, res) => res.json(checkId(req.body.coachId)));
 server.use((req, res) => res.sendFile(INDEX));
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
