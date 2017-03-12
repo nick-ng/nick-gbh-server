@@ -1,10 +1,11 @@
 {
   "name": "nick-gbh-server",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Server to host Guildball games.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "server": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,8 @@
   "homepage": "https://github.com/nick-ng/nick-gbh-server#readme",
   "dependencies": {
     "express": "^4.14.1",
+    "express-graphql": "^0.6.3",
+    "graphql": "^0.9.1",
     "redis": "^2.6.5",
     "uws": "^0.13.0"
   },
