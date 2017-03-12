@@ -1,6 +1,8 @@
 const { GraphQLSchema, GraphQLObjectType } = require('graphql');
 
-export default new GraphQLSchema({
+const gameMutations = require('./mutations/gameMutations');
+
+module.exports = new GraphQLSchema({
   // list all GraphQL queries here
   // query: new GraphQLObjectType({
   //   name: 'Query',
@@ -12,8 +14,6 @@ export default new GraphQLSchema({
   // list all GraphQL mutations here
   mutation: new GraphQLObjectType({
     name: 'Mutation',
-    fields: () => Object.assign({},
-      someMutations,
-    ),
+    fields: () => Object.assign({}, gameMutations),
   }),
 });

@@ -1,13 +1,25 @@
 const express = require('express');
 const uws = require('uws');
 const path = require('path');
+const graphqlHTTP = require('express-graphql');
+
+const schema = require('./graphql/schema');
+
+const root = {
+  hello: () => 'Hello world!',
+};
 
 const PORT = process.env.PORT || 4000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const server = express();
+server.use('/graphql', graphqlHTTP({
+  schema,
+  rootValue: root,
+  graphiql: true,
+}));
+server.use((req, res) => res.sendFile(INDEX));
+server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new uws.Server({ server });
 console.log('wss', wss);

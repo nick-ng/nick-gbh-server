@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLList, GraphQLString } = require('graphql');
 
-export default {
+module.exports = {
   newGame: new GraphQLObjectType({
     name: 'NewGame',
     fields: () => ({

@@ -1,9 +1,12 @@
 const { GraphQLString } = require('graphql');
 
-export default {
+const { doRegistration } = require('../../services/gameService');
+const { newGame } = require('../types/gameTypes');
+
+module.exports = {
   hostGame: {
     description: '',
-    type: ,
+    type: newGame,
     args: {
       email: { type: GraphQLString },
       password: { type: GraphQLString },
@@ -14,12 +17,8 @@ export default {
       country: { type: GraphQLString },
       phone: { type: GraphQLString },
     },
-    resolve: (_, args, { dbClient }) => {
-      return doRegistration(args, dbClient).then((result) => {
-        return { message: result };
-      }).catch((err) => {
-        return { errors: [JSON.parse(err.message).description] };
-      });
-    },
+    resolve: (_, args) => doRegistration(args)
+      .then(result => ({ message: result }))
+      .catch(err => ({ errors: [JSON.parse(err.message).description] })),
   },
 };
