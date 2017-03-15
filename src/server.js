@@ -15,16 +15,14 @@ const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.post('/newgame', makeNewGame);
-server.post('/checkid', (req, res) => res.json(checkId(req.body.coachId)));
+server.post('/checkid', (req, res) => checkId(req.body.coachId).then(newId => res.json(newId)));
 server.use((req, res) => res.sendFile(INDEX));
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new uws.Server({ server });
-console.log('wss', wss);
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  console.log('ws', ws);
   ws.on('close', () => console.log('Client disconnected'));
 });
 

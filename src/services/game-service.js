@@ -18,8 +18,13 @@ module.exports = redisPromise => ({
   },
   checkId: (coachId) => {
     if (coachId) {
+      console.log('coachList', config.redis.coachList);
+      console.log('coachId', coachId);
+      console.log('redisPromose', redisPromise);
       return redisPromise('sismember', [config.redis.coachList, coachId])
-      .then((coachExists) => {
+      .then((a, coachExists) => {
+        console.log('a', a);
+        console.log('coachExists', coachExists);
         if (coachExists) {
           return { coachId };
         }
