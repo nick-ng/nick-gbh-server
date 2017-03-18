@@ -3,10 +3,7 @@ const uws = require('uws');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const { makeRedisClient } = require('./services/redis-service');
-const gameServices = require('./services/game-service');
-
-const { makeNewGame, checkId } = gameServices(makeRedisClient);
+const { makeNewCoachId, makeNewGame, checkId } = require('./services/game-service');
 
 const PORT = process.env.PORT || 4000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
@@ -14,8 +11,15 @@ const INDEX = path.join(__dirname, 'public', 'index.html');
 const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
-server.post('/newgame', makeNewGame);
-server.post('/checkid', (req, res) => checkId(req.body.coachId).then(newId => res.json(newId)));
+
+server.post('/getId', (req, res) => res.json({ coachId: makeNewCoachId() }));
+
+server.post('/newgame', (req, res) => makeNewGame(req.body.coachId)
+                                        .then(({ gameId, coachId }) => res.json({ gameId, coachId })));
+
+server.post('/checkid', (req, res) => checkId(req.body.coachId)
+                                        .then(coachId => res.json({ coachId })));
+
 server.use((req, res) => res.sendFile(INDEX));
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
