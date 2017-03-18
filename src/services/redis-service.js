@@ -1,9 +1,13 @@
 const redis = require('redis');
+const bluebird = require('bluebird');
 
-const redisClient = redis.createClient(process.env.REDIS_URL);
-redisClient.on('error', err => console.log('Error', err));
+const makeRedisClient = () => {
+  redis.createClient(process.env.REDIS_URL);
+  bluebird.promisifyAll(redis.RedisClient.prototype);
+  bluebird.promisifyAll(redis.Multi.prototype);
+  return redis.createClient();
+};
 
 module.exports = {
-  redisClient,
-  redisPromise: (redisCommand, redisArgs) => new Promise(resolve => redisClient[redisCommand](redisArgs, resolve)),
+  makeRedisClient,
 };

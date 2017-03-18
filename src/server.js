@@ -3,10 +3,10 @@ const uws = require('uws');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const { redisPromise } = require('./services/redis-service');
+const { makeRedisClient } = require('./services/redis-service');
 const gameServices = require('./services/game-service');
 
-const { makeNewGame, checkId } = gameServices(redisPromise);
+const { makeNewGame, checkId } = gameServices(makeRedisClient);
 
 const PORT = process.env.PORT || 4000;
 const INDEX = path.join(__dirname, 'public', 'index.html');

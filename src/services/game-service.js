@@ -1,14 +1,13 @@
 const uuidV4 = require('uuid/v4');
 const config = require('../config');
 
-const makeNewCoachId = (redisPromise) => {
+const makeNewCoachId = (redisClient) => {
   const coachId = uuidV4();
-  console.log('new coachId', coachId);
-  redisPromise('sadd', [config.redis.coachList, coachId]);
+  redisClient.sadd([config.redis.coachList, coachId]);
   return coachId;
 };
 
-module.exports = redisPromise => ({
+module.exports = makeRedisClient => ({
   makeNewGame: (coachId) => {
     console.log(`Making new game for ${coachId}`);
     return {
@@ -17,20 +16,17 @@ module.exports = redisPromise => ({
     };
   },
   checkId: (coachId) => {
-    if (coachId) {
-      console.log('coachList', config.redis.coachList);
-      console.log('coachId', coachId);
-      console.log('redisPromose', redisPromise);
-      return redisPromise('sismember', [config.redis.coachList, coachId])
-      .then((a, coachExists) => {
-        console.log('a', a);
-        console.log('coachExists', coachExists);
-        if (coachExists) {
-          return { coachId };
-        }
-        return { coachId: makeNewCoachId(redisPromise) };
-      });
-    }
-    return { coachId: makeNewCoachId(redisPromise) };
+    const redis = makeRedisClient();
+    return redis.sismemberAsync(config.redis.coachList, [coachId || ''])
+    .then((coachExists) => {
+      if (coachExists) {
+        return { coachId };
+      }
+      return { coachId: makeNewCoachId(redis) };
+    })
+    .then((r) => {
+      redis.quit();
+      return r;
+    });
   },
 });
