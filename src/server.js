@@ -11,6 +11,13 @@ const INDEX = path.join(__dirname, 'public', 'index.html');
 const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.set('content-type', 'application/json; charset=utf-8');
+  next();
+});
 
 server.post('/getId', (req, res) => res.json({ coachId: makeNewCoachId() }));
 

@@ -2,7 +2,7 @@ const uuidV4 = require('uuid/v4');
 const config = require('../config');
 const { makeRedisClient, autoScan } = require('./redis-service');
 const { generateNewKey } = require('../utils');
-const { addCoachJSON } = require('../utils/eventMaker');
+const { addCoachJSON } = require('../utils/event-maker');
 
 const makeNewCoachId = () => {
   const coachId = uuidV4();
