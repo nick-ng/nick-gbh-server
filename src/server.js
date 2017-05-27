@@ -7,6 +7,7 @@ const { makeNewCoachId, makeNewGame, checkId } = require('./services/game-servic
 
 const PORT = process.env.PORT || 4000;
 const INDEX = path.join(__dirname, 'public', 'index.html');
+const LEGACY_WARNING = 'This route will be deprecated soon. Please switch to the appropriate route.';
 
 const server = express();
 server.use(bodyParser.json());
@@ -19,13 +20,24 @@ server.use((req, res, next) => {
   next();
 });
 
-server.post('/getId', (req, res) => res.json({ coachId: makeNewCoachId() }));
+server.post('/coaches', (req, res) => res.json({ coachId: makeNewCoachId() }));
 
-server.post('/newgame', (req, res) => makeNewGame(req.body.coachId)
-                                        .then(({ gameId, coachId }) => res.json({ gameId, coachId })));
+server.post('/games', (req, res) => makeNewGame(req.body.coachId)
+  .then(({ gameId, coachId }) => res.json({ gameId, coachId })));
+
+server.put('/coaches', (req, res) => checkId(req.body.coachId)
+  .then(coachId => res.json({ coachId })));
+
+// Legacy routes start
+server.post('/getId', (req, res) => res.json({ coachId: makeNewCoachId(), warning: LEGACY_WARNING }));
 
 server.post('/checkid', (req, res) => checkId(req.body.coachId)
-                                        .then(coachId => res.json({ coachId })));
+  .then(coachId => res.json({ coachId, warning: LEGACY_WARNING })));
+
+server.post('/newgame', (req, res) => makeNewGame(req.body.coachId)
+  .then(({ gameId, coachId }) => res.json({ gameId, coachId, warning: LEGACY_WARNING })));
+
+// Legacy routes end
 
 server.use((req, res) => res.sendFile(INDEX));
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
