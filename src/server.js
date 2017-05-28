@@ -47,6 +47,7 @@ const wss = new uws.Server({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
+  ws.send('test');
 });
 
 setInterval(() => {
